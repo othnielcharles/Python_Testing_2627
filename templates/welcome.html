@@ -1,59 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary | GUDLFT Registration</title>
+    <title>Tableau de bord | GUDLFT Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <header>
-                <a href="{{ url_for('index') }}" class="brand">🏋️ GUDLFT</a>
-                <div class="user-info">
-                    <h2>Welcome, {{club['email']}} </h2>
-                    <a href="{{url_for('logout')}}" class="btn btn-outline btn-sm">Logout</a>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="{{ url_for('index') }}" class="brand">
+                <span>🏋️‍♂️</span>
+                <span>GUDLFT</span>
+                <span class="brand-badge">Espace Club</span>
+            </a>
+            <div class="nav-actions">
+                <a href="/points" class="btn btn-outline btn-sm">🏆 Classement des Clubs</a>
+                <span class="user-pill">
+                    <span class="user-dot"></span>
+                    {{ club['email'] }}
+                </span>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline btn-sm">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Container -->
+    <main class="app-container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashed-messages">
+            {% for message in messages %}
+                <li class="alert">
+                    <span>📢</span>
+                    <span>{{ message }}</span>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Dashboard Hero Header -->
+        <div class="dashboard-hero">
+            <div>
+                <h1>Bienvenue, {{ club['name'] }} 👋</h1>
+                <p>Gérez vos réservations d'athlètes et vos points pour la saison en cours.</p>
+            </div>
+        </div>
+
+        <!-- Key Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-label">Solde de Points</span>
+                    <span class="stat-icon">🪙</span>
                 </div>
-            </header>
-
-            {% with messages = get_flashed_messages()%}
-            {% if messages %}
-                <ul class="flashed-messages">
-                {% for message in messages %}
-                    <li>{{message}}</li>
-                {% endfor %}
-                </ul>
-            {% endif%}
-
-            <div class="points-banner">
-                <span>Club: <strong>{{ club['name'] }}</strong></span>
-                <span class="badge badge-points">Points available: {{club['points']}}</span>
+                <div class="stat-value highlight-points">{{ club['points'] }}</div>
+                <div class="stat-footer">
+                    <span class="badge badge-success">Actif</span>
+                    <span>1 point = 1 place réservée</span>
+                </div>
             </div>
 
-            <h3>Competitions:</h3>
-            <ul class="competitions-list">
-                {% for comp in competitions%}
-                <li class="competition-item">
-                    <div class="competition-details">
-                        <div class="competition-name">{{comp['name']}}</div>
-                        <div class="competition-meta">
-                            <span>Date: {{comp['date']}}</span>
-                            <span class="badge badge-places">Number of Places: {{comp['numberOfPlaces']}}</span>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-label">Compétitions Ouvertes</span>
+                    <span class="stat-icon">📅</span>
+                </div>
+                <div class="stat-value">{{ competitions|length }}</div>
+                <div class="stat-footer">
+                    <span class="badge badge-neutral">Calendrier officiel</span>
+                    <span>Réservations en direct</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-label">Transparence Régionale</span>
+                    <span class="stat-icon">🏆</span>
+                </div>
+                <div style="margin-top: 6px; margin-bottom: 10px;">
+                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">Classement des Clubs</span>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Consultez les points de tous les clubs.</p>
+                </div>
+                <div>
+                    <a href="/points" class="btn btn-outline btn-sm btn-block">Consulter le tableau →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Competitions Section -->
+        <div class="section-header">
+            <h2 class="section-title">
+                <span>🏋️</span>
+                <span>Compétitions Disponibles</span>
+            </h2>
+        </div>
+
+        <div class="competitions-grid">
+            {% for comp in competitions %}
+            <div class="comp-card">
+                <div class="comp-card-body">
+                    <h3 class="comp-title">{{ comp['name'] }}</h3>
+                    <div class="comp-meta">
+                        <div class="comp-meta-item">
+                            <span>📅</span>
+                            <span><strong>Date :</strong> {{ comp['date'] }}</span>
+                        </div>
+                        <div class="comp-meta-item">
+                            <span>🎟️</span>
+                            <span>
+                                {% if comp['numberOfPlaces']|int > 0 %}
+                                    <span class="badge badge-success"><strong>{{ comp['numberOfPlaces'] }}</strong> places restantes</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Concours Complet (0 place)</span>
+                                {% endif %}
+                            </span>
                         </div>
                     </div>
-                    {%if comp['numberOfPlaces']|int >0%}
-                    <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}" class="btn btn-primary btn-sm">Book Places</a>
-                    {%endif%}
-                </li>
-                {% endfor %}
-            </ul>
+                </div>
 
-            <div class="footer-links">
-                <a href="/points" class="btn btn-outline btn-sm">📊 View Clubs Points Board</a>
+                <div class="comp-card-footer">
+                    {% if comp['numberOfPlaces']|int > 0 %}
+                        <a href="{{ url_for('book', competition=comp['name'], club=club['name']) }}" class="btn btn-primary btn-block">
+                            Réserver des places →
+                        </a>
+                    {% else %}
+                        <button class="btn btn-disabled btn-block" disabled>Complet</button>
+                    {% endif %}
+                </div>
             </div>
-            {%endwith%}
+            {% endfor %}
         </div>
-    </div>
+    </main>
 </body>
 </html>
