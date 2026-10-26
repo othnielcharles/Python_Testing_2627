@@ -1,41 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GUDLFT Registration Portal</title>
+    <title>Connexion Secrétaire | GUDLFT Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <header>
-                <a href="{{ url_for('index') }}" class="brand">🏋️ GUDLFT Registration</a>
-            </header>
+    <div class="auth-wrapper">
+        <div class="auth-container">
+            <div class="card" style="text-align: center;">
+                <div style="font-size: 2.5rem; margin-bottom: 12px;">🏋️‍♂️</div>
+                <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">GUDLFT Portal</h1>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">
+                    Plateforme officielle de réservation des compétitions d'haltérophilie
+                </p>
 
-            <h1>Welcome to the GUDLFT Registration Portal!</h1>
-            <p style="color: var(--text-muted);">Please enter your secretary email to access your club dashboard and book competition places:</p>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashed-messages">
+                    {% for message in messages %}
+                        <li class="alert">
+                            <span>⚠️</span>
+                            <span>{{ message }}</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                {% endwith %}
 
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="flashed-messages">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-            {% endwith %}
+                <form action="showSummary" method="post" style="text-align: left;">
+                    <div class="form-group">
+                        <label for="email">Adresse e-mail du secrétaire de club :</label>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            id="email" 
+                            placeholder="ex. john@simplylift.co" 
+                            required 
+                            autofocus 
+                        />
+                        <div class="form-hint">Entrez l'adresse e-mail associée à votre club affilié.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" style="padding: 13px;">
+                        Accéder à l'espace club →
+                    </button>
+                </form>
 
-            <form action="showSummary" method="post">
-                <div class="form-group">
-                    <label for="email">Secretary Email Address:</label>
-                    <input type="email" name="email" id="email" placeholder="e.g. john@simplylift.co" required />
+                <div class="portal-footer">
+                    🔒 Espace sécurisé réservé aux secrétaires de clubs affiliés GUDLFT
                 </div>
-                <button type="submit" class="btn btn-primary">Enter Portal</button>
-            </form>
-
-            <div class="footer-links">
-                <a href="/points" class="btn btn-outline btn-sm">📊 View Clubs Points Board</a>
             </div>
         </div>
     </div>
