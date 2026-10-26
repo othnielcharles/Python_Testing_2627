@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clubs Points Board | GUDLFT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <header>
+                <a href="{{ url_for('index') }}" class="brand">🏋️ GUDLFT</a>
+                <a href="{{ url_for('index') }}" class="btn btn-outline btn-sm">Back to Home</a>
+            </header>
+
+            <h1>Clubs Points Board</h1>
+            <p style="color: var(--text-muted);">Public leaderboard of points available for each registered club:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Club Name</th>
+                        <th>Points Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for club in clubs %}
+                    <tr>
+                        <td><strong>{{ club['name'] }}</strong></td>
+                        <td><span class="badge badge-points">{{ club['points'] }} points</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
