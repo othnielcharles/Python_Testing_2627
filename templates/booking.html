@@ -1,41 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking for {{competition['name']}} || GUDLFT</title>
+    <title>Réservation - {{ competition['name'] }} | GUDLFT</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <header>
-                <a href="{{ url_for('index') }}" class="brand">🏋️ GUDLFT</a>
-                <span class="user-info">Booking for <strong>{{club['name']}}</strong></span>
-            </header>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="{{ url_for('index') }}" class="brand">
+                <span>🏋️‍♂️</span>
+                <span>GUDLFT</span>
+                <span class="brand-badge">Réservation</span>
+            </a>
+            <div class="nav-actions">
+                <span class="user-pill">
+                    <span class="user-dot"></span>
+                    {{ club['name'] }}
+                </span>
+                <a href="{{ url_for('index') }}" class="btn btn-outline btn-sm">Retour</a>
+            </div>
+        </div>
+    </nav>
 
-            <h2>{{competition['name']}}</h2>
-            
-            <div class="points-banner">
-                <span>Date: {{competition['date']}}</span>
-                <span class="badge badge-places">Places available: {{competition['numberOfPlaces']}}</span>
+    <main class="app-container" style="max-width: 620px;">
+        <div class="card">
+            <div style="margin-bottom: 20px;">
+                <span class="badge badge-neutral" style="margin-bottom: 8px;">Compétition Officielle</span>
+                <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">
+                    {{ competition['name'] }}
+                </h1>
+            </div>
+
+            <!-- Booking Summary Box -->
+            <div class="booking-summary-box">
+                <div>
+                    <div class="summary-item-label">📅 Date de l'événement</div>
+                    <div class="summary-item-val" style="font-size: 0.95rem;">{{ competition['date'] }}</div>
+                </div>
+                <div>
+                    <div class="summary-item-label">🎟️ Places disponibles</div>
+                    <div class="summary-item-val" style="color: var(--primary);">{{ competition['numberOfPlaces'] }}</div>
+                </div>
+                <div>
+                    <div class="summary-item-label">🪙 Vos points club</div>
+                    <div class="summary-item-val" style="color: var(--success-text);">{{ club['points'] }} pts</div>
+                </div>
             </div>
 
             <form action="/purchasePlaces" method="post">
-                <input type="hidden" name="club" value="{{club['name']}}">
-                <input type="hidden" name="competition" value="{{competition['name']}}">
-                
+                <input type="hidden" name="club" value="{{ club['name'] }}">
+                <input type="hidden" name="competition" value="{{ competition['name'] }}">
+
                 <div class="form-group">
-                    <label for="places">How many places?</label>
-                    <input type="number" name="places" id="places" min="1" max="12" placeholder="e.g. 1" required />
+                    <label for="places">Combien de places souhaitez-vous réserver ?</label>
+                    <input 
+                        type="number" 
+                        name="places" 
+                        id="places" 
+                        min="1" 
+                        max="12" 
+                        placeholder="ex. 2" 
+                        required 
+                        autofocus
+                    />
+                    <div class="form-hint">
+                        💡 Règles : 1 place = 1 point déduit. Maximum 12 places autorisées par club.
+                    </div>
                 </div>
-                
-                <div style="display: flex; gap: 12px; align-items: center; margin-top: 20px;">
-                    <button type="submit" class="btn btn-primary">Book</button>
-                    <a href="{{ url_for('index') }}" class="btn btn-outline">Cancel</a>
+
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">
+                        Confirmer la réservation
+                    </button>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline" style="flex: 1;">
+                        Annuler
+                    </a>
                 </div>
             </form>
         </div>
-    </div>
+    </main>
 </body>
 </html>
