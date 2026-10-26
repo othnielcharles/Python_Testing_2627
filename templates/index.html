@@ -1,18 +1,43 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GUDLFT Registration</title>
+    <title>GUDLFT Registration Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Welcome to the GUDLFT Registration Portal!</h1>
-    Please enter your secretary email to continue:
-    <form action="showSummary" method="post">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id=""/>
-        <button type="submit">Enter</button>
-    </form>
-    <hr />
-    <p><a href="{{ url_for('points') }}">View Clubs Points Board</a></p>
+    <div class="container">
+        <div class="card">
+            <header>
+                <a href="{{ url_for('index') }}" class="brand">🏋️ GUDLFT Registration</a>
+            </header>
+
+            <h1>Welcome to the GUDLFT Registration Portal!</h1>
+            <p style="color: var(--text-muted);">Please enter your secretary email to access your club dashboard and book competition places:</p>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashed-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+
+            <form action="showSummary" method="post">
+                <div class="form-group">
+                    <label for="email">Secretary Email Address:</label>
+                    <input type="email" name="email" id="email" placeholder="e.g. john@simplylift.co" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Enter Portal</button>
+            </form>
+
+            <div class="footer-links">
+                <a href="/points" class="btn btn-outline btn-sm">📊 View Clubs Points Board</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
