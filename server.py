@@ -1,4 +1,6 @@
+
 import json
+from datetime import datetime
 from flask import Flask,render_template,request,redirect,flash,url_for
 
 
@@ -34,6 +36,13 @@ def showSummary():
 def book(competition,club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
+
+    competitionDate = datetime.strptime(foundCompetition['date'], '%Y-%m-%d %H:%M:%S')
+
+    if competitionDate <= datetime.now():
+        flash("This competition has already taken place.")
+        return redirect(url_for('index'))
+
     if foundClub and foundCompetition:
         return render_template('booking.html',club=foundClub,competition=foundCompetition)
     else:
@@ -45,6 +54,13 @@ def book(competition,club):
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
+
+    competitionDate = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S')
+
+    if competitionDate <= datetime.now():
+        flash("This competition has already taken place.")
+        return redirect(url_for('index'))
+
     placesRequired = int(request.form['places'])
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     flash('Great-booking complete!')
