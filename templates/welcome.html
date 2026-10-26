@@ -1,100 +1,36 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Summary | GUDLFT Registration</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans min-h-screen p-4 sm:p-8">
-    <div class="max-w-3xl mx-auto space-y-6">
-        
-        <!-- Header / Navigation Bar -->
-        <header class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🏋️</span>
-                    <h2 class="text-xl font-bold text-gray-900">Welcome, {{club['email']}}</h2>
-                </div>
-                <p class="text-sm text-gray-500 mt-1">Club: <span class="font-semibold text-gray-800">{{club['name']}}</span></p>
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="/points" class="inline-flex items-center px-3.5 py-2 border border-gray-300 shadow-sm text-xs font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
-                    📊 View Clubs Points Board
-                </a>
-                <a href="{{url_for('logout')}}" class="inline-flex items-center px-3.5 py-2 border border-transparent text-xs font-semibold rounded-lg text-red-600 bg-red-50 hover:bg-red-100 transition-colors">
-                    Logout
-                </a>
-            </div>
-        </header>
+<body>
+        <h2>Welcome, {{club['email']}} </h2><a href="{{url_for('logout')}}">Logout</a> | <a href="/points">Points Board</a>
 
-        <!-- Flashed Messages -->
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="space-y-2">
-            {% for message in messages %}
-                <div class="p-4 bg-blue-50 border border-blue-200 text-blue-800 text-sm rounded-xl flex items-center gap-2">
-                    <span>📢</span>
-                    <span>{{ message }}</span>
-                </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% endwith %}
+    {% with messages = get_flashed_messages()%}
+    {% if messages %}
+        <ul>
+       {% for message in messages %}
+            <li>{{message}}</li>
+        {% endfor %}
+       </ul>
+    {% endif%}
+    Points available: {{club['points']}}
+    <h3>Competitions:</h3>
+    <ul>
+        {% for comp in competitions%}
+        <li>
+            {{comp['name']}}<br />
+            Date: {{comp['date']}}</br>
+            Number of Places: {{comp['numberOfPlaces']}}
+            {%if comp['numberOfPlaces']|int >0%}
+            <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
+            {%endif%}
+        </li>
+        <hr />
+        {% endfor %}
+    </ul>
+    {%endwith%}
 
-        <!-- Points Available Banner -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex items-center justify-between">
-            <div>
-                <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Club Balance</span>
-                <div class="text-3xl font-extrabold text-emerald-600 mt-1">
-                    {{club['points']}} <span class="text-base font-semibold text-gray-500">Points available</span>
-                </div>
-            </div>
-            <div class="text-right">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                    Active Membership
-                </span>
-            </div>
-        </div>
-
-        <!-- Competitions Section -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
-            <h3 class="text-lg font-bold text-gray-900 pb-3 border-b border-gray-100">Competitions:</h3>
-
-            <ul class="divide-y divide-gray-100">
-                {% for comp in competitions %}
-                <li class="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="text-base font-bold text-gray-900">{{comp['name']}}</div>
-                        <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
-                            <span>📅 Date: <strong class="text-gray-700">{{comp['date']}}</strong></span>
-                            <span>•</span>
-                            <span>
-                                Number of Places: 
-                                {% if comp['numberOfPlaces']|int > 0 %}
-                                    <strong class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">{{comp['numberOfPlaces']}}</strong>
-                                {% else %}
-                                    <strong class="text-red-700 bg-red-50 px-2 py-0.5 rounded-md border border-red-200">Full (0)</strong>
-                                {% endif %}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div>
-                        {% if comp['numberOfPlaces']|int > 0 %}
-                        <a href="{{ url_for('book', competition=comp['name'], club=club['name']) }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors w-full sm:w-auto">
-                            Book Places
-                        </a>
-                        {% else %}
-                        <span class="inline-flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-400 text-xs font-semibold rounded-lg cursor-not-allowed">
-                            Full
-                        </span>
-                        {% endif %}
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
 </body>
 </html>
