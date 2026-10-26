@@ -1,17 +1,41 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking for {{competition['name']}} || GUDLFT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h2>{{competition['name']}}</h2>
-    Places available: {{competition['numberOfPlaces']}}
-    <form action="/purchasePlaces" method="post">
-        <input type="hidden" name="club" value="{{club['name']}}">
-        <input type="hidden" name="competition" value="{{competition['name']}}">
-        <label for="places">How many places?</label><input type="number" name="places" id=""/>
-        <button type="submit">Book</button>
-    </form>
+    <div class="container">
+        <div class="card">
+            <header>
+                <a href="{{ url_for('index') }}" class="brand">🏋️ GUDLFT</a>
+                <span class="user-info">Booking for <strong>{{club['name']}}</strong></span>
+            </header>
+
+            <h2>{{competition['name']}}</h2>
+            
+            <div class="points-banner">
+                <span>Date: {{competition['date']}}</span>
+                <span class="badge badge-places">Places available: {{competition['numberOfPlaces']}}</span>
+            </div>
+
+            <form action="/purchasePlaces" method="post">
+                <input type="hidden" name="club" value="{{club['name']}}">
+                <input type="hidden" name="competition" value="{{competition['name']}}">
+                
+                <div class="form-group">
+                    <label for="places">How many places?</label>
+                    <input type="number" name="places" id="places" min="1" max="12" placeholder="e.g. 1" required />
+                </div>
+                
+                <div style="display: flex; gap: 12px; align-items: center; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">Book</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
