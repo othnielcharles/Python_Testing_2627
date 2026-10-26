@@ -1,138 +1,100 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord | GUDLFT Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Summary | GUDLFT Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <!-- Top Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-inner">
-            <a href="{{ url_for('index') }}" class="brand">
-                <span>🏋️‍♂️</span>
-                <span>GUDLFT</span>
-                <span class="brand-badge">Espace Club</span>
-            </a>
-            <div class="nav-actions">
-                <a href="/points" class="btn btn-outline btn-sm">🏆 Classement des Clubs</a>
-                <span class="user-pill">
-                    <span class="user-dot"></span>
-                    {{ club['email'] }}
-                </span>
-                <a href="{{ url_for('logout') }}" class="btn btn-outline btn-sm">Déconnexion</a>
+<body class="bg-gray-50 text-gray-900 font-sans min-h-screen p-4 sm:p-8">
+    <div class="max-w-3xl mx-auto space-y-6">
+        
+        <!-- Header / Navigation Bar -->
+        <header class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🏋️</span>
+                    <h2 class="text-xl font-bold text-gray-900">Welcome, {{club['email']}}</h2>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Club: <span class="font-semibold text-gray-800">{{club['name']}}</span></p>
             </div>
-        </div>
-    </nav>
+            <div class="flex items-center gap-3">
+                <a href="/points" class="inline-flex items-center px-3.5 py-2 border border-gray-300 shadow-sm text-xs font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                    📊 View Clubs Points Board
+                </a>
+                <a href="{{url_for('logout')}}" class="inline-flex items-center px-3.5 py-2 border border-transparent text-xs font-semibold rounded-lg text-red-600 bg-red-50 hover:bg-red-100 transition-colors">
+                    Logout
+                </a>
+            </div>
+        </header>
 
-    <!-- Main Dashboard Container -->
-    <main class="app-container">
+        <!-- Flashed Messages -->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <ul class="flashed-messages">
+            <div class="space-y-2">
             {% for message in messages %}
-                <li class="alert">
+                <div class="p-4 bg-blue-50 border border-blue-200 text-blue-800 text-sm rounded-xl flex items-center gap-2">
                     <span>📢</span>
                     <span>{{ message }}</span>
-                </li>
+                </div>
             {% endfor %}
-            </ul>
+            </div>
         {% endif %}
         {% endwith %}
 
-        <!-- Dashboard Hero Header -->
-        <div class="dashboard-hero">
+        <!-- Points Available Banner -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex items-center justify-between">
             <div>
-                <h1>Bienvenue, {{ club['name'] }} 👋</h1>
-                <p>Gérez vos réservations d'athlètes et vos points pour la saison en cours.</p>
-            </div>
-        </div>
-
-        <!-- Key Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-label">Solde de Points</span>
-                    <span class="stat-icon">🪙</span>
-                </div>
-                <div class="stat-value highlight-points">{{ club['points'] }}</div>
-                <div class="stat-footer">
-                    <span class="badge badge-success">Actif</span>
-                    <span>1 point = 1 place réservée</span>
+                <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Club Balance</span>
+                <div class="text-3xl font-extrabold text-emerald-600 mt-1">
+                    {{club['points']}} <span class="text-base font-semibold text-gray-500">Points available</span>
                 </div>
             </div>
-
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-label">Compétitions Ouvertes</span>
-                    <span class="stat-icon">📅</span>
-                </div>
-                <div class="stat-value">{{ competitions|length }}</div>
-                <div class="stat-footer">
-                    <span class="badge badge-neutral">Calendrier officiel</span>
-                    <span>Réservations en direct</span>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-label">Transparence Régionale</span>
-                    <span class="stat-icon">🏆</span>
-                </div>
-                <div style="margin-top: 6px; margin-bottom: 10px;">
-                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">Classement des Clubs</span>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Consultez les points de tous les clubs.</p>
-                </div>
-                <div>
-                    <a href="/points" class="btn btn-outline btn-sm btn-block">Consulter le tableau →</a>
-                </div>
+            <div class="text-right">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                    Active Membership
+                </span>
             </div>
         </div>
 
         <!-- Competitions Section -->
-        <div class="section-header">
-            <h2 class="section-title">
-                <span>🏋️</span>
-                <span>Compétitions Disponibles</span>
-            </h2>
-        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
+            <h3 class="text-lg font-bold text-gray-900 pb-3 border-b border-gray-100">Competitions:</h3>
 
-        <div class="competitions-grid">
-            {% for comp in competitions %}
-            <div class="comp-card">
-                <div class="comp-card-body">
-                    <h3 class="comp-title">{{ comp['name'] }}</h3>
-                    <div class="comp-meta">
-                        <div class="comp-meta-item">
-                            <span>📅</span>
-                            <span><strong>Date :</strong> {{ comp['date'] }}</span>
-                        </div>
-                        <div class="comp-meta-item">
-                            <span>🎟️</span>
+            <ul class="divide-y divide-gray-100">
+                {% for comp in competitions %}
+                <li class="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="text-base font-bold text-gray-900">{{comp['name']}}</div>
+                        <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                            <span>📅 Date: <strong class="text-gray-700">{{comp['date']}}</strong></span>
+                            <span>•</span>
                             <span>
+                                Number of Places: 
                                 {% if comp['numberOfPlaces']|int > 0 %}
-                                    <span class="badge badge-success"><strong>{{ comp['numberOfPlaces'] }}</strong> places restantes</span>
+                                    <strong class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">{{comp['numberOfPlaces']}}</strong>
                                 {% else %}
-                                    <span class="badge badge-danger">Concours Complet (0 place)</span>
+                                    <strong class="text-red-700 bg-red-50 px-2 py-0.5 rounded-md border border-red-200">Full (0)</strong>
                                 {% endif %}
                             </span>
                         </div>
                     </div>
-                </div>
 
-                <div class="comp-card-footer">
-                    {% if comp['numberOfPlaces']|int > 0 %}
-                        <a href="{{ url_for('book', competition=comp['name'], club=club['name']) }}" class="btn btn-primary btn-block">
-                            Réserver des places →
+                    <div>
+                        {% if comp['numberOfPlaces']|int > 0 %}
+                        <a href="{{ url_for('book', competition=comp['name'], club=club['name']) }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors w-full sm:w-auto">
+                            Book Places
                         </a>
-                    {% else %}
-                        <button class="btn btn-disabled btn-block" disabled>Complet</button>
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
+                        {% else %}
+                        <span class="inline-flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-400 text-xs font-semibold rounded-lg cursor-not-allowed">
+                            Full
+                        </span>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
-    </main>
+    </div>
 </body>
 </html>
