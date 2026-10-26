@@ -1,53 +1,16 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GUDLFT Registration</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex items-center justify-center p-4">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-sm border border-gray-200 p-8 space-y-6">
-        <div class="text-center space-y-2">
-            <span class="text-4xl inline-block">🏋️</span>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900">GUDLFT Registration</h1>
-            <p class="text-sm text-gray-500">Welcome to the GUDLFT Registration Portal!</p>
-        </div>
-
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="space-y-2">
-            {% for message in messages %}
-                <div class="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg flex items-center gap-2">
-                    <span>⚠️</span>
-                    <span>{{ message }}</span>
-                </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% endwith %}
-
-        <form action="showSummary" method="post" class="space-y-4">
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                    Please enter your secretary email to continue:
-                </label>
-                <input 
-                    type="email" 
-                    name="email" 
-                    id="email" 
-                    placeholder="e.g. john@simplylift.co" 
-                    required 
-                    class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-                />
-            </div>
-            <button 
-                type="submit" 
-                class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
-            >
-                Enter
-            </button>
-        </form>
-    </div>
+<body>
+    <h1>Welcome to the GUDLFT Registration Portal!</h1>
+    Please enter your secretary email to continue:
+    <form action="showSummary" method="post">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id=""/>
+        <button type="submit">Enter</button>
+    </form>
 </body>
 </html>
